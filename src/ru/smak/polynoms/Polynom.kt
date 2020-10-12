@@ -3,7 +3,8 @@ package ru.smak.polynoms
 import kotlin.math.abs
 import kotlin.math.max
 
-class Polynom(coef: DoubleArray) {
+open class Polynom(coef: DoubleArray)
+{
 
     /**
      * Коэффициенты полинома для использования внутри класса
@@ -20,12 +21,13 @@ class Polynom(coef: DoubleArray) {
      * Степень полинома
      */
     val power : Int
-    get() = coef.size - 1
+        get() = coef.size - 1
 
     /**
      * Тело первичного конструктора
      */
-    init{
+    init
+    {
         correctPower()
     }
 
@@ -37,7 +39,8 @@ class Polynom(coef: DoubleArray) {
     /**
      * Удаление нулевых коэффициентов при старших степенях
      */
-    private fun correctPower() {
+    private fun correctPower()
+    {
         var b = true
         coef = coef.reversed().filterIndexed { i, v ->
             if (v.compareTo(0.0) != 0) b = false
@@ -53,11 +56,18 @@ class Polynom(coef: DoubleArray) {
     operator fun plus(other: Polynom) =
         Polynom(DoubleArray(max(power, other.power) + 1)
         {
-            (if (it < coef.size) coef[it] else 0.0) +
+            (if (it < coef.size) coef[it] else 0.0) +// тут перебор массива
                     (if (it < other.coef[it]) other.coef[it] else 0.0)
         }
         )
+    /*
+    operator fun plus (other: Double)=// вопрос что значит
+            Polynom(DoubleArray(power + 1) { coef[0] + other })
 
+    operator fun plus (other:Int)=
+            Polynom(DoubleArray(power + 1) { coef[0] + other })
+
+     */
     /**
      * Определение значения произведения полинома на число
      * @param k вещественный коэффициент
@@ -78,7 +88,8 @@ class Polynom(coef: DoubleArray) {
      * @param other полином, на который производится умножение
      * @return произведение двух полиномов
      */
-    operator fun times(other: Polynom): Polynom{
+    operator fun times(other: Polynom): Polynom// это мы определяем что функция возвращает
+    {
         //Создание массива коэффициентов нового полинома
         val t = DoubleArray(power + other.power + 1){ 0.0 }
         //Для каждого коэффициента первого полинома и
@@ -97,8 +108,8 @@ class Polynom(coef: DoubleArray) {
      * @param k число, на которое требуется подилить полином
      * @return частное от деления полинома на число
      */
-    operator fun div(k: Double) : Polynom? =
-       if (k.compareTo(0.0)!=0)
+    operator fun div(k: Double) : Polynom? =// вопрос что он значит
+       if (k.compareTo(0.0)!=0)// сравноми !=
            this*(1.0/k)
        else
            null
@@ -107,7 +118,8 @@ class Polynom(coef: DoubleArray) {
      * Переопределение функции формирования строки с записью полинома
      * @return Строка с представлением полинома
      */
-    override fun toString(): String {
+    override fun toString(): String // переопредяляем функцию  toString
+    {
         //Построитель строки, где будет формироваться результат
         val res = StringBuilder()
         //Степень полинома
@@ -149,7 +161,8 @@ class Polynom(coef: DoubleArray) {
      * @param x точка, в которой нужно вычислить значение полинома
      * @return значение полинома в точке
      */
-    operator fun invoke(x: Double): Double{
+    operator fun invoke(x: Double): Double
+    {
         var pow = 1.0
         return coef.reduce { acc, d ->
             pow *= x; acc + d * pow
